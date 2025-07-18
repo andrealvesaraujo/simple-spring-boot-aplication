@@ -26,7 +26,7 @@ public class BookController {
     @GetMapping("/{id}")
     public Book findOne(@PathVariable Long id) {
         return bookRepository.findById(id)
-                .orElseThrow(BookNotFoundException::new);
+                .orElseThrow();
     }
 
     @PostMapping
@@ -38,17 +38,17 @@ public class BookController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         bookRepository.findById(id)
-                .orElseThrow(BookNotFoundException::new);
+                .orElseThrow();
         bookRepository.deleteById(id);
     }
 
     @PutMapping("/{id}")
-    public Book updateBook(@RequestBody Book book, @PathVariable Long id) {
+    public Book updateBook(@RequestBody Book book, @PathVariable Long id) throws BookIdMismatchException {
         if (book.getId() != id) {
             throw new BookIdMismatchException();
         }
         bookRepository.findById(id)
-                .orElseThrow(BookNotFoundException::new);
+                .orElseThrow();
         return bookRepository.save(book);
     }
 }
